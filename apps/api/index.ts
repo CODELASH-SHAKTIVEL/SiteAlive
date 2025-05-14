@@ -1,27 +1,87 @@
-import express from 'express';
+import express from "express"
+import { authMiddleware } from "./middleware";
+import { prismaClient } from "db/client";
+// import cors from "cors";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || 'localhost';
-const API_VERSION = process.env.API_VERSION || 'v1';
 
-// Middleware to parse JSON bodies
+// app.use(cors());
 app.use(express.json());
-// Middleware to parse URL-encoded bodies
-app.use(express.urlencoded({ extended: true }));
-// Middleware to handle CORS
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-    }
-);
 
-app.get('/api/v1', (req, res) => {
-    res.send('Welcome to the API!');
-}
-);
+app.post("/api/v1/website", authMiddleware, async (req, res) => {
+    const userId = req.userId!;
+    const { url } = req.body;
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://${HOST}:${PORT}/api/${API_VERSION}`);
-});
+    const data = await prismaClient.website.create({
+        data: {
+            userId,
+            url
+        }
+    })
+
+    res.json({
+        id: data.id
+    })
+})
+
+app.get("/api/v1/website/status", authMiddleware, async (req, res) => {
+    const websiteId = req.query.websiteId! as unknown as string;
+    const userId = req.userId;
+
+    const data = await prismaClient.website.findFirst({
+        where: {
+            id: websiteId,
+            userId,
+            disabled: false
+        },
+        include: {
+            ticks: true
+        }
+    })
+
+    res.json(data)
+
+})
+
+app.get("/api/v1/websites", authMiddleware, async (req, res) => {
+    const userId = req.userId!;
+
+    const websites = await prismaClient.website.findMany({
+        where: {
+            userId,
+            disabled: false
+        },
+        include: {
+            ticks: true
+        }
+    })
+
+    res.json({
+        websites
+    })
+})
+
+app.delete("/api/v1/website/", authMiddleware, async (req, res) => {
+    const websiteId = req.body.websiteId;
+    const userId = req.userId!;
+
+    await prismaClient.website.update({
+        where: {
+            id: websiteId,
+            userId
+        },
+        data: {
+            disabled: true
+        }
+    })
+
+    res.json({
+        message: "Deleted website successfully"
+    })
+})
+
+app.post("/api/v1/payout/:validatorId", async (req, res) => {
+   
+})
+
+app.listen(8080);
