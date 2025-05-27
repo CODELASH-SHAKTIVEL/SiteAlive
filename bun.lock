@@ -12,8 +12,10 @@
     "apps/api": {
       "name": "api",
       "dependencies": {
+        "@types/cors": "^2.8.18",
         "@types/express": "^5.0.1",
         "@types/jsonwebtoken": "^9.0.9",
+        "cors": "^2.8.5",
         "db": "*",
         "express": "^5.1.0",
         "jsonwebtoken": "^9.0.2",
@@ -418,6 +420,8 @@
     "@types/bun": ["@types/bun@1.2.14", "", { "dependencies": { "bun-types": "1.2.14" } }, "sha512-VsFZKs8oKHzI7zwvECiAJ5oSorWndIWEVhfbYqZd4HI/45kzW7PN2Rr5biAzvGvRuNmYLSANY+H59ubHq8xw7Q=="],
 
     "@types/connect": ["@types/connect@3.4.38", "", { "dependencies": { "@types/node": "*" } }, "sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug=="],
+
+    "@types/cors": ["@types/cors@2.8.18", "", { "dependencies": { "@types/node": "*" } }, "sha512-nX3d0sxJW41CqQvfOzVG1NCTXfFDrDWIghCZncpHeWlVFd81zxB/DLhg7avFg6eHLCRX7ckBmoIIcqa++upvJA=="],
 
     "@types/estree": ["@types/estree@1.0.7", "", {}, "sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ=="],
 
