@@ -3,6 +3,8 @@ import React, { useState, useMemo } from 'react';
 import { ChevronDown, ChevronUp, Globe, Plus, Moon, Sun } from 'lucide-react';
 import { useWebsites } from '@/hooks/useWebsite';
 import { useAuth } from '@clerk/nextjs';
+import axios from 'axios';
+import { API_BACKEND_URL } from '@/config';
 
 type UptimeStatus = "good" | "bad" | "unknown";
 
@@ -233,6 +235,16 @@ function App() {
 
             const token = await getToken();
             setIsModalOpen(false);
+             axios.post(`${API_BACKEND_URL}/api/v1/website`, {
+                url,
+            }, {
+                headers: {
+                    Authorization: token,
+                },
+            })
+            .then(() => {
+                refreshWebsites();
+            })
         }}
       />
     </div>
