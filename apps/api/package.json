@@ -1,10 +1,14 @@
 {
   "name": "api",
-  "module": "index.ts",
+  "module": "server.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "dev": "tsx server.ts"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "tsx": "^4.19.4"
   },
   "peerDependencies": {
     "typescript": "^5"
@@ -16,6 +20,7 @@
     "cors": "^2.8.5",
     "db": "*",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.10"
   }
 }

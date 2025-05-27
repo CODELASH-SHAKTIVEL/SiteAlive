@@ -12,12 +12,15 @@ declare global {
 }
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  const token = req.headers["authorization"];
+  const authHeader = req.headers["authorization"];
 
-  if (!token) {
+  if (!authHeader) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
+
+  // Typical header: "Bearer eyJhbGciOiJIUzI1NiIsInR..."
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader;
 
   try {
     const decoded = jwt.verify(token, JWT_PUBLIC_KEY) as jwt.JwtPayload;
