@@ -9,9 +9,8 @@ const PORT =  8000;
 app.use(cors());
 app.use(express.json());
 
-app.post("/api/v1/website",  async (req, res) => {
-    // const userId = req.userId!;
-     const userId = "clerk_user_id"; // For testing purposes, replace with actual user ID logic
+app.post("/api/v1/website",  authMiddleware , async (req, res) => {
+    const userId = req.userId!;
     const { url } = req.body;
 
     const data = await prismaClient.website.create({
@@ -45,12 +44,12 @@ app.get("/api/v1/website/status", authMiddleware, async (req, res) => {
 });
 
 app.get("/api/v1/websites"
-    // , authMiddleware
+    , authMiddleware
     , async (req, res) => {
-    // const userId = req.userId!;
-    //  const userId = "clerk_user_id"; // For testing purposes, replace with actual user ID logic
+    const userId = req.userId!;
     const websites = await prismaClient.website.findMany({
         where: {
+            userId,
             disabled: false
         },
         include: {
