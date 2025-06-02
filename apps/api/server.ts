@@ -1,17 +1,15 @@
-import express from "express";
+import express from "express"
 import { authMiddleware } from "./middleware";
 import { prismaClient } from "db/client";
 import cors from "cors";
 
 const app = express();
-const PORT =  8000;
 
 app.use(cors());
 app.use(express.json());
 
-app.post("/api/v1/website",  async (req, res) => {
-    // const userId = req.userId!;
-     const userId = "clerk_user_id"; // For testing purposes, replace with actual user ID logic
+app.post("/api/v1/website", authMiddleware, async (req, res) => {
+    const userId = req.userId!;
     const { url } = req.body;
 
     const data = await prismaClient.website.create({
@@ -19,12 +17,12 @@ app.post("/api/v1/website",  async (req, res) => {
             userId,
             url
         }
-    });
+    })
 
     res.json({
         id: data.id
-    });
-});
+    })
+})
 
 app.get("/api/v1/website/status", authMiddleware, async (req, res) => {
     const websiteId = req.query.websiteId! as unknown as string;
@@ -39,29 +37,29 @@ app.get("/api/v1/website/status", authMiddleware, async (req, res) => {
         include: {
             ticks: true
         }
-    });
+    })
 
-    res.json(data);
-});
+    res.json(data)
 
-app.get("/api/v1/websites"
-    // , authMiddleware
-    , async (req, res) => {
-    // const userId = req.userId!;
-    //  const userId = "clerk_user_id"; // For testing purposes, replace with actual user ID logic
+})
+
+app.get("/api/v1/websites", authMiddleware, async (req, res) => {
+    const userId = req.userId!;
+
     const websites = await prismaClient.website.findMany({
         where: {
+            userId,
             disabled: false
         },
         include: {
             ticks: true
         }
-    });
+    })
 
     res.json({
         websites
-    });
-});
+    })
+})
 
 app.delete("/api/v1/website/", authMiddleware, async (req, res) => {
     const websiteId = req.body.websiteId;
@@ -75,19 +73,15 @@ app.delete("/api/v1/website/", authMiddleware, async (req, res) => {
         data: {
             disabled: true
         }
-    });
+    })
 
     res.json({
         message: "Deleted website successfully"
-    });
-});
+    })
+})
 
 app.post("/api/v1/payout/:validatorId", async (req, res) => {
-    // TODO: implement payout logic
-    res.status(501).json({ message: "Not implemented" });
-});
+   
+})
 
-// ✅ Start server with a console log
-app.listen(PORT, () => {
-    console.log(`🚀 Server started on http://localhost:${PORT}`);
-});
+app.listen(8000);

@@ -237,10 +237,10 @@ function App() {
           try {
             await axios.post(`${API_BACKEND_URL}/api/v1/website`, {
               url
-            // }, {
-            //   headers: {
-            //     Authorization: token,
-            //   },
+            }, {
+              headers: {
+                Authorization: token,
+              },
             });
 
             refreshWebsites();
