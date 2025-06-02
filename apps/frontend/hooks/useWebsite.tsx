@@ -22,11 +22,11 @@ export function useWebsites() {
     async function refreshWebsites() {    
         const token = await getToken();
         const response = await axios.get(`${API_BACKEND_URL}/api/v1/websites`
-            // , {
-            // headers: {
-            //     Authorization: `Bearer ${token}`,  // <-- Add Bearer prefix
-            // },
-        // }
+            , {
+             headers: {
+                Authorization: token,
+            },
+        }
     );
 
         setWebsites(response.data.websites);
